@@ -1,22 +1,48 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import App from "./App";
-
 import Enzyme, { shallow } from "enzyme";
 import EnzymeAdaptor from "enzyme-adapter-react-16";
-import { exportAllDeclaration } from "@babel/types";
 
 Enzyme.configure({ adapter: new EnzymeAdaptor() });
 
+/**
+ * Factory function to create a shallowWrapper for the App Component
+ * @param {object} prop - Component props specific to this setup
+ * @param {any} state   - Initial state for this setup
+ * @returns {ShallowWrapper}
+ */
+const setup = (prop = {}, state = null) => {
+  return shallow(<App {...prop} />);
+};
+
+/**
+ * Return ShallowWrapper containing node(s) with the given data-test value
+ * @param {ShallowWrapper} shallowWrapper - Enzyme ShallowWrapper to search within
+ * @param {string} val - value of date-test attribute for search
+ * @returns {ShallowWrapper}
+ */
+const findByAttr = (shallowWrapper, val) => {
+  return shallowWrapper.find(`[data-test="${val}"]`);
+};
+
 test("Render without Errors", () => {
-  const wrapper = shallow(<App />);
-  const appComponent = wrapper.find("[data-test='component-app']");
+  const wrapper = setup();
+  const appComponent = findByAttr(wrapper, "component-app");
   expect(appComponent.length).toBe(1);
 });
 
-test("Render Increase Btn", () => {});
+test("Render Increase Btn", () => {
+  const wrapper = setup();
+  const btnComponent = findByAttr(wrapper, "component-btn");
+  expect(btnComponent.length).toBe(1);
+});
 
-test("Render Counter Display", () => {});
+test("Render Counter Display", () => {
+  const wrapper = setup();
+  const counterDisplay = findByAttr(wrapper, "component-counter-display");
+  expect(counterDisplay.length).toBe(1);
+});
 
 test("Counter starts at 0", () => {});
 

@@ -9,11 +9,13 @@ Enzyme.configure({ adapter: new EnzymeAdaptor() });
 /**
  * Factory function to create a shallowWrapper for the App Component
  * @param {object} prop - Component props specific to this setup
- * @param {any} state   - Initial state for this setup
+ * @param {object} state   - Initial state for this setup
  * @returns {ShallowWrapper}
  */
 const setup = (prop = {}, state = null) => {
-  return shallow(<App {...prop} />);
+  const wrapper = shallow(<App {...prop} />);
+  if (state) wrapper.setState(state);
+  return wrapper;
 };
 
 /**
@@ -50,4 +52,16 @@ test("Counter starts at 0", () => {
   expect(initialCounterState).toBe(0);
 });
 
-test("Clicking button increments counter display", () => {});
+test("Clicking button increments counter display", () => {
+  const counter = 7;
+  const wrapper = setup(null, { counter });
+
+  // find btn and click
+  const btn = findByAttr(wrapper, "component-btn");
+  btn.simulate("click");
+
+  // find display and test value
+  const counterDisplay = findByAttr(wrapper, "component-counter-display");
+  // wrapper.setState({counter: this.counter + 1});
+  expect(counterDisplay.text()).toContain(counter + 1);
+});

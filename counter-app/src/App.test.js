@@ -44,6 +44,10 @@ test("Render Counter Display", () => {
   expect(counterDisplay.length).toBe(1);
 });
 
-test("Counter starts at 0", () => {});
+test("Counter starts at 0", () => {
+  const wrapper = setup();
+  const initialCounterState = wrapper.state("counter");
+  expect(initialCounterState).toBe(0);
+});
 
 test("Clicking button increments counter display", () => {});
